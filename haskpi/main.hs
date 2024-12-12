@@ -1,4 +1,5 @@
 module Main where
+import Text.Printf
 
 -- An implementation of the Gauss-Legendre algorithm
 -- https://en.wikipedia.org/wiki/Gauss%E2%80%93Legendre_algorithm
@@ -16,4 +17,20 @@ gl_approx_impl i (a, b, p, t) =
     p' = 2.0 * p
 
 
-main = putStrLn . show $ gl_approx 4
+-- An implementation of the [Bailey–Borwein–Plouffe formula](https://en.wikipedia.org/wiki/Bailey%E2%80%93Borwein%E2%80%93Plouffe_formula)
+-- `iters` is a measure of *hexadecimal* digit precsision.
+bbp :: (Floating n) => Int -> n
+bbp iters = bbp_impl iters 0 
+
+bbp_impl :: (Floating n) => Int -> n -> n
+bbp_impl 0 _ = 0.0
+bbp_impl iters k =
+    (1 / (16 ** k)) * (a - b - c - d) + next 
+    where
+    a = 4.0 / (8.0 * k + 1.0)
+    b = 2.0 / (8.0 * k + 4.0)
+    c = 1.0 / (8.0 * k + 5.0)
+    d = 1.0 / (8.0 * k + 6.0)
+    next = bbp_impl (iters - 1) (k + 1.0)
+
+main = printf "GL: %f\nBBP: %f\n" (gl_approx 4 :: Double) (bbp 11 :: Double )
