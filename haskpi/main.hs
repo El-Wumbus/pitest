@@ -33,4 +33,4 @@ bbp_impl iters k =
     d = 1.0 / (8.0 * k + 6.0)
     next = bbp_impl (iters - 1) (k + 1.0)
 
-main = printf "GL: %f\nBBP: %f\n" (gl_approx 4 :: Double) (bbp 11 :: Double )
+main = printf "GL: %f\nBBP: %f\n" (gl_approx 4 :: Double) (bbp 11 :: Double)
